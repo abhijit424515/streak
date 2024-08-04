@@ -3,7 +3,7 @@ FNAME = file
 CPP = g++
 BISON = bison
 FLEX = flex
-TGT = runme
+TGT = client
 
 SCAN = $(FNAME).l
 PARSE = $(FNAME).y

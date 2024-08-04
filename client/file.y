@@ -64,5 +64,25 @@ keepttl
 %%
 
 int main() {
-	yyparse();
+	// yyparse();
+
+	mqd_t mq;
+    mq = mq_open(QUEUE_NAME, O_WRONLY);
+    if (mq == (mqd_t) -1) {
+        perror("mq_open");
+        exit(EXIT_FAILURE);
+    }
+
+	while (1) {
+		string s;
+		getline(cin, s);
+		Entry e(time(NULL),s);
+
+		if (mq_send(mq, (char*)(void*)&e, sizeof(e), 0) == -1) {
+			perror("mq_send");
+			exit(EXIT_FAILURE);
+		}
+	}
+
+    mq_close(mq);
 }
