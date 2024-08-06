@@ -2,3 +2,4 @@ parse.*
 scan.*
 client
 *.o
+core

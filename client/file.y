@@ -66,6 +66,8 @@ keepttl
 int main() {
 	// yyparse();
 
+	Shma sm;
+
 	mqd_t mq;
     mq = mq_open(QUEUE_NAME, O_WRONLY);
     if (mq == (mqd_t) -1) {
@@ -74,9 +76,11 @@ int main() {
     }
 
 	while (1) {
-		string s;
-		getline(cin, s);
-		Entry e(time(NULL),s);
+		string s; cin>>s;
+
+		// [x] TODO: initialize Get_R in shared heap, then send the pointer offset
+		Get_R *x = sm.alloc<Get_R>(s);
+		Entry e(sm.offset(x), time(NULL));
 
 		if (mq_send(mq, (char*)(void*)&e, sizeof(e), 0) == -1) {
 			perror("mq_send");
